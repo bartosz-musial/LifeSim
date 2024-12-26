@@ -4,9 +4,10 @@ class Organism:
         self.y = y
         self.energy = energy
         self.age = 0
+        self.vision_list = []
 
     def __str__(self):
-        return f"\033[32mx: {self.x}, y: {self.y}, energy: {self.energy}, age: {self.age}\033[0m"
+        return f"\033[32mx: {self.x}, y: {self.y}, energy: {self.energy}, age: {self.age}\nvision: {self.vision_list}\033[0m"
 
     def move(self, x: int, y: int) -> None:
         self.x = x
@@ -16,3 +17,6 @@ class Organism:
 
     def eat(self, energy_boost: int) -> None:
         self.energy += energy_boost
+
+    def vision(self, left: int, right: int, up: int, down: int):
+        self.vision_list = [left, right, up, down]

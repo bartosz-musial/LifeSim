@@ -54,3 +54,17 @@ class Grid:
         new_location = self.get_new_location(organism)
         self.handle_food_interaction(organism, new_location)
         self.update_organism_position(organism, new_location)
+
+    def get_vision(self, organism) -> None:
+        x, y = organism.x, organism.y
+        def check(dx, dy):
+            if 0 <= x + dx < self.width and 0 <= y + dy < self.height:
+                cell = self.grid[dy + y][dx + x]
+                return "F" if cell == "\033[32mF\033[0m" else cell
+
+        left = check(-1, 0)
+        right = check(1, 0)
+        up = check(0, -1)
+        down = check(0, 1)
+
+        organism.vision(left, right, up, down)
