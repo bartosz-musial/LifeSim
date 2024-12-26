@@ -40,7 +40,7 @@ class Grid:
             temp = [organism.x, organism.y]
             temp[0] += dx
             temp[1] += dy
-            if temp[0] > 0 and temp[1] > 0:
+            if 0 <= temp[0] < self.width and 0 <= temp[1] < self.height:
                 organism.x, organism.y = temp[0], temp[1]
                 organism.energy -= 1
                 self.grid[location[1]][location[0]] = "."
