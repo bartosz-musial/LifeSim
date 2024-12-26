@@ -32,17 +32,25 @@ class Grid:
                 self.grid[y][x] = "\033[31mO\033[0m"
                 return x, y
 
-    def organism_movement(self, organism) -> None:
+    def get_new_location(self, organism) -> tuple:
         movement = ((0, 1), (0, -1), (1, 0), (-1, 0))
         while True:
             dx, dy = random.choice(movement)
-            location = [organism.x, organism.y]
-            temp = [organism.x, organism.y]
-            temp[0] += dx
-            temp[1] += dy
-            if 0 <= temp[0] < self.width and 0 <= temp[1] < self.height:
-                organism.x, organism.y = temp[0], temp[1]
-                organism.energy -= 1
-                self.grid[location[1]][location[0]] = "."
-                self.grid[temp[1]][temp[0]] = "\033[31mO\033[0m"
-                break
+            new_x, new_y = organism.x + dx, organism.y + dy
+            if 0 <= new_x < self.width and 0 <= new_y < self.height:
+                return new_x, new_y
+
+    def update_organism_position(self, organism, new_location: tuple) -> None:
+        old_x, old_y = organism.x, organism.y
+        organism.move(new_location[0], new_location[1])
+        self.grid[old_y][old_x] = "."
+        self.grid[new_location[1]][new_location[0]] = "\033[31mO\033[0m"
+
+    def handle_food_interaction(self, organism, new_location: tuple) -> None:
+        if self.grid[new_location[1]][new_location[0]] == "\033[32mF\033[0m":
+            organism.eat(10)
+
+    def organism_movement(self, organism) -> None:
+        new_location = self.get_new_location(organism)
+        self.handle_food_interaction(organism, new_location)
+        self.update_organism_position(organism, new_location)
