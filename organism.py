@@ -8,3 +8,11 @@ class Organism:
 
     def __str__(self):
         return f"\033[32mx: {self.x}, y: {self.y}, energy: {self.energy}\033[0m"
+
+    def move(self, x: int, y: int) -> None:
+        self.x = x
+        self.y = y
+        self.energy -= 1
+
+    def eat(self, energy_boost: int) -> None:
+        self.energy += energy_boost
