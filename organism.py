@@ -1,3 +1,5 @@
+from q_learning import Q
+
 class Organism:
     def __init__(self, x: int, y: int, energy: int):
         self.x = x
@@ -18,5 +20,8 @@ class Organism:
     def eat(self, energy_boost: int) -> None:
         self.energy += energy_boost
 
-    def vision(self, left: int, right: int, up: int, down: int):
+    def vision(self, left: int, right: int, up: int, down: int) -> None:
         self.vision_list = [left, right, up, down]
+        state = (self.x, self.y, tuple(self.vision_list))
+        if state not in Q:
+            Q[state] = {action: 0 for action in ['left', 'right', 'up', 'down']}
