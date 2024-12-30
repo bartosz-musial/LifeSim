@@ -2,7 +2,7 @@ import random
 
 Q = {}
 
-def choose_action(state, epsilon=0.1):
+def choose_action(state, epsilon):
     if state not in Q:
         Q[state] = {action: 0 for action in ['left', 'right', 'up', 'down']}
     if random.random() < epsilon: # exploration
