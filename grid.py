@@ -33,14 +33,6 @@ class Grid:
                 self.grid[y][x] = "\033[31mO\033[0m"
                 return x, y
 
-    # def get_new_location(self, organism) -> tuple:
-    #     movement = ((0, 1), (0, -1), (1, 0), (-1, 0))
-    #     while True:
-    #         dx, dy = random.choice(movement)
-    #         new_x, new_y = organism.x + dx, organism.y + dy
-    #         if 0 <= new_x < self.width and 0 <= new_y < self.height:
-    #             return new_x, new_y
-
     def update_organism_position(self, organism, new_location: tuple) -> None:
         old_x, old_y = organism.x, organism.y
         organism.move(new_location[0], new_location[1])
@@ -49,13 +41,14 @@ class Grid:
 
     def handle_food_interaction(self, organism, new_location: tuple) -> int:
         if self.grid[new_location[1]][new_location[0]] == "\033[32mF\033[0m":
-            organism.eat(10)
-            return 10
+            organism.eat(5)
+            self.add_food()
+            return 5
         return -1
 
-    def organism_movement(self, organism) -> None:
+    def organism_movement(self, organism, epsilon: float) -> None:
         state = (organism.x, organism.y, tuple(organism.vision_list))
-        action = choose_action(state)
+        action = choose_action(state, epsilon)
 
         movement_map = {
             'left': (-1, 0),
@@ -73,7 +66,7 @@ class Grid:
             update_q_value(state, action, reward, new_state)
         else:
             new_state = (organism.x, organism.y, tuple(organism.vision_list))
-            update_q_value(state, action, -1, new_state)
+            update_q_value(state, action, -2, new_state)
             organism.energy -= 1
             organism.age += 1
 
